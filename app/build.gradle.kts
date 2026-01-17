@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.taksh.petspalace10"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.taksh.petspalace10"
