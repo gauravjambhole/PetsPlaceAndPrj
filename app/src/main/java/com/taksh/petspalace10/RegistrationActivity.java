@@ -1,6 +1,8 @@
 package com.taksh.petspalace10;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -8,21 +10,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.taksh.petspalace10.Common.Urls;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText etName, etMobile, etEmail, etUsername, etPassword;
-    private Button btnRegister;
-    private TextView regTitle, tvAlreadyAccount;
-    private View layoutMobile;
+    EditText etName, etMobile, etEmail, etUsername, etPassword;
+    Button btnRegister;
+    TextView regTitle, tvAlreadyAccount;
+    View layoutMobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        // Initialize Views
         regTitle = findViewById(R.id.reg_title);
         etName = findViewById(R.id.etRegName);
         layoutMobile = findViewById(R.id.layoutMobile);
@@ -35,59 +47,81 @@ public class RegistrationActivity extends AppCompatActivity {
 
         startStaggeredAnimation();
 
-        // Glide back to Login
-        tvAlreadyAccount.setOnClickListener(v -> finishAfterTransition());
+        tvAlreadyAccount.setOnClickListener(v ->
+                startActivity(new Intent(this, LoginActivity.class)));
 
-        btnRegister.setOnClickListener(v -> validateAndRegister());
+        btnRegister.setOnClickListener(v -> validate());
     }
 
     private void startStaggeredAnimation() {
-        int duration = 600;
-        int d = 100; // delay increment
-
-        regTitle.animate().alpha(1f).translationY(0).setDuration(duration).setStartDelay(200).start();
-        etName.animate().alpha(1f).translationY(0).setDuration(duration).setStartDelay(200 + d).start();
-        layoutMobile.animate().alpha(1f).translationY(0).setDuration(duration).setStartDelay(200 + (d * 2)).start();
-        etEmail.animate().alpha(1f).translationY(0).setDuration(duration).setStartDelay(200 + (d * 3)).start();
-        etUsername.animate().alpha(1f).translationY(0).setDuration(duration).setStartDelay(200 + (d * 4)).start();
-        etPassword.animate().alpha(1f).translationY(0).setDuration(duration).setStartDelay(200 + (d * 5)).start();
-
-        btnRegister.animate().alpha(1f).translationY(0).setDuration(duration)
-                .setInterpolator(new DecelerateInterpolator()).setStartDelay(200 + (d * 6)).start();
-
-        tvAlreadyAccount.animate().alpha(1f).translationY(0).setDuration(duration).setStartDelay(200 + (d * 7)).start();
+        int d = 600;
+        regTitle.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(200).start();
+        etName.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(300).start();
+        layoutMobile.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(400).start();
+        etEmail.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(500).start();
+        etUsername.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(600).start();
+        etPassword.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(700).start();
+        btnRegister.animate().alpha(1).translationY(0)
+                .setInterpolator(new DecelerateInterpolator())
+                .setDuration(d).setStartDelay(800).start();
+        tvAlreadyAccount.animate().alpha(1).translationY(0)
+                .setDuration(d).setStartDelay(900).start();
     }
 
-    private void validateAndRegister() {
+    private void validate() {
+
         String name = etName.getText().toString().trim();
         String mobile = etMobile.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String user = etUsername.getText().toString().trim();
         String pass = etPassword.getText().toString().trim();
 
-        if (name.isEmpty()) { etName.setError("Name required"); return; }
+        if (name.isEmpty()) { etName.setError("Required"); return; }
+        if (mobile.length() != 10) { etMobile.setError("10 digits"); return; }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) { etEmail.setError("Invalid"); return; }
+        if (user.length() < 5) { etUsername.setError("Min 5"); return; }
+        if (pass.isEmpty()) { etPassword.setError("Required"); return; }
 
-        // India 10-digit validation
-        if (mobile.length() != 10) {
-            etMobile.setError("Enter exactly 10 digits");
-            return;
-        }
+        register(name, mobile, email, user, pass);
+    }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Invalid Email"); return;
-        }
+    private void register(String name, String mobile, String email, String user, String pass) {
 
-        if (user.length() < 8) {
-            etUsername.setError("Username must be 8+ characters"); return;
-        }
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(15000);
 
-        String specialChars = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*";
-        if (!pass.matches(".*\\d.*") || !pass.matches(specialChars)) {
-            etPassword.setError("Need 1 number and 1 special character"); return;
-        }
+        RequestParams params = new RequestParams();
+        params.put("name", name);
+        params.put("mobileno", mobile);
+        params.put("emailid", email);
+        params.put("username", user);
+        params.put("password", pass);
 
-        // Logic to save data would go here (e.g., Firebase or SQLite)
-        Toast.makeText(this, "Account Created for " + user, Toast.LENGTH_SHORT).show();
-        finishAfterTransition();
+        client.post(Urls.RegisterUserWebService, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    if (response.getString("success").equals("1")) {
+                        Toast.makeText(RegistrationActivity.this,
+                                "Registration Successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(RegistrationActivity.this,
+                                response.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Log.e("JSON", e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers,
+                                  Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(RegistrationActivity.this,
+                        "Server Error " + statusCode, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
