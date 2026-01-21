@@ -2,11 +2,13 @@ package com.taksh.petspalace10;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class RegistrationActivity extends AppCompatActivity {
     Button btnRegister;
     TextView regTitle, tvAlreadyAccount;
     View layoutMobile;
+    CheckBox cbShowPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +47,21 @@ public class RegistrationActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etRegPassword);
         btnRegister = findViewById(R.id.btnRegister);
         tvAlreadyAccount = findViewById(R.id.tvAlreadyAccount);
+        cbShowPassword = findViewById(R.id.cbShowPassword);
 
         startStaggeredAnimation();
+
+        // Checkbox logic for show/hide password with dynamic text
+        cbShowPassword.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                cbShowPassword.setText("Hide Password");
+            } else {
+                etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                cbShowPassword.setText("Show Password");
+            }
+            etPassword.setSelection(etPassword.getText().length());
+        });
 
         tvAlreadyAccount.setOnClickListener(v ->
                 startActivity(new Intent(this, LoginActivity.class)));
@@ -61,6 +77,7 @@ public class RegistrationActivity extends AppCompatActivity {
         etEmail.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(500).start();
         etUsername.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(600).start();
         etPassword.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(700).start();
+        cbShowPassword.animate().alpha(1).translationY(0).setDuration(d).setStartDelay(750).start();
         btnRegister.animate().alpha(1).translationY(0)
                 .setInterpolator(new DecelerateInterpolator())
                 .setDuration(d).setStartDelay(800).start();
@@ -69,7 +86,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void validate() {
-
         String name = etName.getText().toString().trim();
         String mobile = etMobile.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
@@ -86,7 +102,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void register(String name, String mobile, String email, String user, String pass) {
-
         AsyncHttpClient client = new AsyncHttpClient();
         client.setTimeout(15000);
 
@@ -98,29 +113,35 @@ public class RegistrationActivity extends AppCompatActivity {
         params.put("password", pass);
 
         client.post(Urls.RegisterUserWebService, params, new JsonHttpResponseHandler() {
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
+                    // Check if PHP returned success code 1
                     if (response.getString("success").equals("1")) {
-                        Toast.makeText(RegistrationActivity.this,
-                                "Registration Successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
+                        Toast.makeText(RegistrationActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+
+                        // Create intent for Homepage (MainActivity)
+                        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+
+                        // Prevent user from returning to Registration page when pressing back button
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                        startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(RegistrationActivity.this,
-                                response.getString("message"), Toast.LENGTH_SHORT).show();
+                        // Display error message from PHP server
+                        Toast.makeText(RegistrationActivity.this, response.getString("message"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
-                    Log.e("JSON", e.toString());
+                    Log.e("JSON_ERROR", e.toString());
                 }
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers,
-                                  Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(RegistrationActivity.this,
-                        "Server Error " + statusCode, Toast.LENGTH_SHORT).show();
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                // Triggered if the server cannot be reached or crashes
+                Log.e("NETWORK_ERROR", "Code: " + statusCode);
+                Toast.makeText(RegistrationActivity.this, "Server Error " + statusCode, Toast.LENGTH_SHORT).show();
             }
         });
     }

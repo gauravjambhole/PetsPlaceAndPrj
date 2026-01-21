@@ -133,13 +133,26 @@
                 android:textColorHint="#CCCCCC"
                 android:translationY="40dp" />
 
+            <CheckBox
+                android:id="@+id/cbShowPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="5dp"
+                android:alpha="0"
+                android:buttonTint="#FFFFFF"
+                android:text="Show Password"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:translationY="40dp" />
+
             <Button
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:alpha="0"
-                android:backgroundTint="@color/joyful_orange"
+                android:backgroundTint="#FF9800"
                 android:text="Create Account"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
