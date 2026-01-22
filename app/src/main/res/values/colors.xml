@@ -1,4 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_blue">#5BB0BA</color> <color name="vibrant_green">#98C15E</color> <color name="warm_beige">#E5C9A6</color> <color name="joyful_orange">#F9B44D</color> <color name="white">#FFFFFF</color>
+    <color name="primary_blue">#5BB0BA</color>
+    <color name="vibrant_green">#98C15E</color>
+    <color name="warm_beige">#E5C9A6</color>
+    <color name="joyful_orange">#F9B44D</color>
+    <color name="white">#FFFFFF</color>
     <color name="text_grey">#4A4A4A</color>
+
+    <color name="bg_light">#F8F9FA</color>
+    <color name="bg_card_grey">#F1F1F1</color>
+    <color name="bg_card_white">#FFFFFF</color>
+    <color name="bg_card_blue">#079EE4</color>
+
+
+
 </resources>
