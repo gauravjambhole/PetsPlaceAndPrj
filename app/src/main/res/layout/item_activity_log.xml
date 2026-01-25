@@ -12,12 +12,14 @@
         android:layout_height="match_parent">
 
         <View
+            android:id="@+id/timelineLine"
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:background="#EEEEEE" />
 
         <View
+            android:id="@+id/timelineDot"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:layout_centerHorizontal="true"
@@ -28,12 +30,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_margin="8dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="2dp"
-        app:cardBackgroundColor="@color/white">
+        app:cardElevation="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,24 +43,25 @@
                 android:id="@+id/iconBg"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:background="@drawable/circle_dot"
-                android:backgroundTint="#8BC34A" /> <ImageView
-            android:id="@+id/imgActivityIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:layout_alignStart="@id/iconBg"
-            android:layout_alignEnd="@id/iconBg"
-            android:src="@drawable/ic_log"
-            app:tint="@color/white" />
+                android:background="@drawable/circle_dot" />
+
+            <ImageView
+                android:id="@+id/imgActivityIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_alignStart="@id/iconBg"
+                android:layout_alignEnd="@id/iconBg"
+                android:src="@drawable/ic_log"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/tvActivityTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/iconBg"
-                android:layout_marginStart="16dp"
-                android:text="30-min walk in the park"
+                android:layout_marginStart="12dp"
+                android:text="Morning Walk"
                 android:textColor="#333333"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -72,22 +72,24 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvActivityTitle"
                 android:layout_toEndOf="@id/iconBg"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:text="8:30 AM"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:text="07:00 AM"
                 android:textColor="#999999"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tvEndTime"
+                android:id="@+id/tvDuration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/tvActivityTitle"
-                android:layout_marginTop="4dp"
-                android:text="9:00 AM"
-                android:textColor="#999999"
-                android:textSize="12sp" />
+                android:layout_centerVertical="true"
+                android:background="#F0F0F0"
+                android:padding="6dp"
+                android:text="30 mins"
+                android:textColor="#555555"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

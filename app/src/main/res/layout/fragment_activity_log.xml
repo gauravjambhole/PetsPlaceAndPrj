@@ -11,19 +11,18 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="4dp"
+        android:outlineProvider="background"
         android:padding="20dp"
-        app:layout_top_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/btnBackLog"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:padding="4dp"
-            android:src="@drawable/ic_home"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            app:tint="@color/primary_blue" />
+        app:layout_constraintTop_toTopOf="parent"> <ImageView
+        android:id="@+id/btnBackLog"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_home"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        app:tint="@color/primary_blue" />
 
         <TextView
             android:layout_width="wrap_content"

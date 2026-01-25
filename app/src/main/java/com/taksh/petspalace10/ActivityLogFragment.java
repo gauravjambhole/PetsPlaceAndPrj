@@ -1,64 +1,55 @@
 package com.taksh.petspalace10;
 
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ActivityLogFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ActivityLogFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recyclerView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ActivityLogFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ActivityLogFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ActivityLogFragment newInstance(String param1, String param2) {
-        ActivityLogFragment fragment = new ActivityLogFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_activity_log, container, false);
+        recyclerView = view.findViewById(R.id.rvActivityLog);
+
+        view.findViewById(R.id.btnBackLog).setOnClickListener(v -> getParentFragmentManager().popBackStack());
+
+        setupActivities();
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_activity_log, container, false);
+    private void setupActivities() {
+        List<ActivityLogModel> list = new ArrayList<>();
+
+        // 10+ Diverse Daily Activities
+        list.add(new ActivityLogModel("Morning Walk", "07:00 AM", "30 mins", R.drawable.ic_log, Color.parseColor("#4CAF50")));
+        list.add(new ActivityLogModel("Breakfast Time", "08:00 AM", "15 mins", R.drawable.ic_food, Color.parseColor("#FF9800")));
+        list.add(new ActivityLogModel("Teeth Cleaning", "08:45 AM", "5 mins", R.drawable.ic_health, Color.parseColor("#00BCD4")));
+        list.add(new ActivityLogModel("Disk Throw Training", "10:30 AM", "20 mins", R.drawable.ic_paw, Color.parseColor("#8BC34A")));
+        list.add(new ActivityLogModel("Fresh Water Refill", "12:00 PM", "2 mins", R.drawable.ic_health, Color.parseColor("#2196F3")));
+        list.add(new ActivityLogModel("Afternoon Power Nap", "01:30 PM", "90 mins", R.drawable.ic_home, Color.parseColor("#9C27B0")));
+        list.add(new ActivityLogModel("Grooming & Brushing", "04:00 PM", "25 mins", R.drawable.ic_health, Color.parseColor("#E91E63")));
+        list.add(new ActivityLogModel("Evening Park Walk", "06:30 PM", "45 mins", R.drawable.ic_log, Color.parseColor("#2E7D32")));
+        list.add(new ActivityLogModel("Dinner Serving", "08:00 PM", "15 mins", R.drawable.ic_food, Color.parseColor("#FB8C00")));
+        list.add(new ActivityLogModel("Night Sleep", "10:30 PM", "8 hours", R.drawable.ic_home, Color.parseColor("#3F51B5")));
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new ActivityLogAdapter(list));
+
+        // Quick Entrance Animation
+        recyclerView.setAlpha(0f);
+        recyclerView.setTranslationY(50f);
+        recyclerView.animate().alpha(1f).translationY(0).setDuration(600).start();
     }
 }
