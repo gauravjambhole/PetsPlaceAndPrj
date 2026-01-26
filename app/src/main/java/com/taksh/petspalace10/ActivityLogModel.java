@@ -14,15 +14,11 @@ public class ActivityLogModel {
         this.isCompleted = isCompleted;
     }
 
-    // Getters
     public String getTitle() { return title; }
     public String getTimeSlot() { return timeSlot; }
     public String getDuration() { return duration; }
     public int getIconRes() { return iconRes; }
     public int getIconBgColor() { return iconBgColor; }
     public boolean isCompleted() { return isCompleted; }
-    // Add this method to allow the Adapter to change the status
-    public void setCompleted(boolean completed) {
-        this.isCompleted = completed;
-    }
+    public void setCompleted(boolean completed) { isCompleted = completed; }
 }

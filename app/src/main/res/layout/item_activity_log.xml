@@ -30,6 +30,8 @@
                 <ImageView android:id="@+id/imgActivityIcon" android:layout_width="24dp" android:layout_height="24dp" android:layout_centerVertical="true" android:layout_alignStart="@id/iconBg" android:layout_alignEnd="@id/iconBg" app:tint="@color/white" />
                 <TextView android:id="@+id/tvActivityTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toEndOf="@id/iconBg" android:layout_marginStart="12dp" android:textColor="#333333" android:textStyle="bold" android:textSize="16sp"/>
                 <TextView android:id="@+id/tvStartTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/tvActivityTitle" android:layout_toEndOf="@id/iconBg" android:layout_marginStart="12dp" android:textColor="#999999" android:textSize="12sp" />
+
+                <ImageView android:id="@+id/imgStatusCheck" android:layout_width="20dp" android:layout_height="20dp" android:layout_alignParentEnd="true" android:src="@drawable/ic_check" android:visibility="gone" app:tint="#2196F3"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -45,19 +47,35 @@
                     android:id="@+id/tvCountdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="00:00"
-                    android:textSize="32sp"
+                    android:text="--:--"
+                    android:textSize="36sp"
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
 
-                <Button
-                    android:id="@+id/btnStartTimer"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="START TRACKING"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="#2196F3"
-                    android:textColor="@color/white"/>
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="12dp">
+
+                    <Button
+                        android:id="@+id/btnStartTimer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="START"
+                        android:backgroundTint="#2196F3"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="8dp"/>
+
+                    <Button
+                        android:id="@+id/btnMarkDone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FINISH NOW"
+                        android:backgroundTint="#4CAF50"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
