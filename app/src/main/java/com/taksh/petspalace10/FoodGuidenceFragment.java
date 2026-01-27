@@ -61,7 +61,7 @@ public class FoodGuidenceFragment extends Fragment implements MealAdapter.OnMeal
     }
 
     private void checkAllMealsLogged() {
-        List<MealModel> list = viewModel.getMealList();
+        List<MealModel> list = viewModel.getMealList();// testing
         if (list == null) return;
 
         boolean allDone = true;
